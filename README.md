@@ -1,8 +1,6 @@
 ## 🗒 GoLang To-Do List Sample App w/ Redis
 
-[![Build Status](https://app.travis-ci.com/bvisonl/godo-list.svg?branch=master)](https://app.travis-ci.com/bvisonl/godo-list)
-
-[![Coverage Status](https://coveralls.io/repos/github/bvisonl/godo-list/badge.svg)](https://coveralls.io/github/bvisonl/godo-list)
+[![Build Status](https://app.travis-ci.com/bvisonl/godo-list.svg?branch=master)](https://app.travis-ci.com/bvisonl/godo-list) [![Coverage Status](https://coveralls.io/repos/github/bvisonl/godo-list/badge.svg)](https://coveralls.io/github/bvisonl/godo-list)
 
 ### 📝 Description
 
@@ -15,6 +13,7 @@ A simple to-do list app written in GoLang with Redis as a backend showing a few 
 - [✅] [GoLang](https://golang.org/) as a language
 - [✅] [Git](https://git-scm.com/) as a version control system
 - [✅] [Travis CI](https://travis-ci.org/) as a continuous integration system
+- [✅] [Coveralls](https://coveralls.io/) as a code coverage system for Travis CI
 - Using the following features to handle concurrency & application lifecycle:
   - Using [goroutine](https://golang.org/pkg/runtime/#Goexit)
   - Using [sync.WaitGroup](https://golang.org/pkg/sync/#WaitGroup)
