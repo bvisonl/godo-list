@@ -10,6 +10,7 @@ A simple to-do list app written in GoLang with Redis as a backend showing a few 
 - [✅] [Gorilla](https://godoc.org/github.com/gorilla/mux) as a router
 - [✅] [GoLang](https://golang.org/) as a language
 - [✅] [Git](https://git-scm.com/) as a version control system
+- [✅] [Travis CI](https://travis-ci.org/) as a continuous integration system
 - Using the following features to handle concurrency & application lifecycle:
   - Using [goroutine](https://golang.org/pkg/runtime/#Goexit)
   - Using [sync.WaitGroup](https://golang.org/pkg/sync/#WaitGroup)
