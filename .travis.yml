@@ -1,5 +1,10 @@
 language: go
+
+go:
+  - "1.17.x"
+
 sudo: required
+
 services:
   - docker
 
@@ -9,7 +14,3 @@ env:
 before_install:
   - docker pull redis
   - docker run -d -p 6379:6379 redis
-
-script:
-  - env GO111MODULE=on go build
-  - env GO111MODULE=on go test
