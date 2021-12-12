@@ -9,4 +9,7 @@ env:
 before_install:
   - docker pull redis
   - docker run -d -p 6379:6379 redis
-  - go get all
+
+script:
+  - env GO111MODULE=on go build
+  - env GO111MODULE=on go test
