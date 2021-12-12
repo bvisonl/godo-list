@@ -23,7 +23,7 @@ func GetLists(w http.ResponseWriter, r *http.Request) {
 
 	defer cancel()
 
-	res, _ := rdb.Keys(ctx, "*").Result()
+	res, _ := app.RedisClient.Keys(ctx, "*").Result()
 
 	keys, err := json.Marshal(res)
 
@@ -49,7 +49,7 @@ func GetList(w http.ResponseWriter, r *http.Request) {
 
 	defer cancel()
 
-	list, err := rdb.LRange(ctx, vars["listName"], 0, -1).Result()
+	list, err := app.RedisClient.LRange(ctx, vars["listName"], 0, -1).Result()
 
 	if err != nil {
 		log.Println(err)
@@ -103,7 +103,7 @@ func CreateList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = rdb.LPush(ctx, list.Name, items).Result()
+	_, err = app.RedisClient.LPush(ctx, list.Name, items).Result()
 
 	if err != nil {
 		log.Println(err)
@@ -118,7 +118,7 @@ func CreateList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(listJson))
 }
 
@@ -145,7 +145,7 @@ func UpdateList(w http.ResponseWriter, r *http.Request) {
 
 	// Remove the old list
 	// Obviously a better way to do this would be acting upon items directly
-	_, err = rdb.Del(ctx, list.Name).Result()
+	_, err = app.RedisClient.Del(ctx, list.Name).Result()
 	if err != nil {
 		log.Println(err)
 		w.Write([]byte("Error while deleting the list"))
@@ -166,7 +166,7 @@ func UpdateList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = rdb.RPush(ctx, list.Name, items).Result()
+	_, err = app.RedisClient.RPush(ctx, list.Name, items).Result()
 
 	if err != nil {
 		log.Println(err)
@@ -197,7 +197,7 @@ func DeleteList(w http.ResponseWriter, r *http.Request) {
 
 	defer cancel()
 
-	_, err := rdb.Del(ctx, vars["listName"]).Result()
+	_, err := app.RedisClient.Del(ctx, vars["listName"]).Result()
 
 	if err != nil {
 		log.Println(err)

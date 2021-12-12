@@ -12,45 +12,69 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var rdb *redis.Client
+var app App
 
-func main() {
+type App struct {
+	RedisClient *redis.Client
+	Router      *mux.Router
+	Server      http.Server
+}
 
-	rdb = redis.NewClient(&redis.Options{
+func (app *App) Initialize(c chan os.Signal) {
+
+	// Redis setup
+	app.RedisClient = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	// Router
+	app.Router = mux.NewRouter()
+	app.Router.HandleFunc("/lists", GetLists).Methods("GET")
+	app.Router.HandleFunc("/lists/{listName}", GetList).Methods("GET")
+	app.Router.HandleFunc("/lists", CreateList).Methods("POST")
+	app.Router.HandleFunc("/lists/{listName}", UpdateList).Methods("PUT", "PATCH")
+	app.Router.HandleFunc("/lists/{listName}", DeleteList).Methods("DELETE")
 
-	r := mux.NewRouter()
-	r.HandleFunc("/lists", GetLists).Methods("GET")
-	r.HandleFunc("/lists/{listName}", GetList).Methods("GET")
-	r.HandleFunc("/lists", CreateList).Methods("POST")
-	r.HandleFunc("/lists/{listName}", UpdateList).Methods("PUT", "PATCH")
-	r.HandleFunc("/lists/{listName}", DeleteList).Methods("DELETE")
-
-	srv := &http.Server{
-		Handler: r,
+	// Server
+	app.Server = http.Server{
+		Handler: app.Router,
 		Addr:    ":8000",
+		// Good practice: enforce timeouts for servers you create!
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
 	}
 
+}
+
+func main() {
+
+	log.Println("⏱  Starting the server...")
+
+	// Exit channel
 	c := make(chan os.Signal, 1)
 
+	app = App{}
+	app.Initialize(c)
+
 	go func(c chan os.Signal) {
-		if err := srv.ListenAndServe(); err != nil {
+		log.Println("👂 Listening to connections.")
+		if err := app.Server.ListenAndServe(); err != nil {
 			c <- os.Interrupt
 		}
 	}(c)
 
-	signal.Notify(c, os.Interrupt)
-
 	<-c
 
-	srv.Shutdown(ctx)
-	log.Println("Shutting down")
+	signal.Notify(c, os.Interrupt)
+
+	log.Println("🚨  Stopping the server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	app.Server.Shutdown(ctx)
 
 	os.Exit(0)
 }
