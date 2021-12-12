@@ -57,12 +57,7 @@ func GetList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	listJson, err := json.Marshal(list)
-	if err != nil {
-		log.Println(err)
-		w.Write([]byte("Error while marshalling the list"))
-		return
-	}
+	listJson, _ := json.Marshal(list)
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(listJson))
@@ -111,12 +106,7 @@ func CreateList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	listJson, err := json.Marshal(list)
-	if err != nil {
-		log.Println(err)
-		w.Write([]byte("Error while marshalling the list"))
-		return
-	}
+	listJson, _ := json.Marshal(list)
 
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte(listJson))
@@ -158,13 +148,7 @@ func UpdateList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	items, err := json.Marshal(list.Tasks)
-
-	if err != nil {
-		log.Println(err)
-		w.Write([]byte("Error while marshalling the tasks"))
-		return
-	}
+	items, _ := json.Marshal(list.Tasks)
 
 	_, err = app.RedisClient.RPush(ctx, list.Name, items).Result()
 
@@ -174,12 +158,7 @@ func UpdateList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	listJson, err := json.Marshal(list)
-	if err != nil {
-		log.Println(err)
-		w.Write([]byte("Error while marshalling the list"))
-		return
-	}
+	listJson, _ := json.Marshal(list)
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(listJson))
