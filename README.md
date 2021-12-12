@@ -2,6 +2,8 @@
 
 [![Build Status](https://app.travis-ci.com/bvisonl/godo-list.svg?branch=master)](https://app.travis-ci.com/bvisonl/godo-list)
 
+[![Coverage Status](https://coveralls.io/repos/github/bvisonl/godo-list/badge.svg)](https://coveralls.io/github/bvisonl/godo-list)
+
 ### 📝 Description
 
 A simple to-do list app written in GoLang with Redis as a backend showing a few GoLang features.

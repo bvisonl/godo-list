@@ -8,9 +8,12 @@ sudo: required
 services:
   - docker
 
-env:
-  COMPOSE_VERSION: "1.25.4"
-
 before_install:
   - docker pull redis
   - docker run -d -p 6379:6379 redis
+  - go install golang.org/x/tools/cmd/cover
+  - go install github.com/mattn/goveralls
+
+script:
+  - go test -v -covermode=count -coverprofile=coverage.out
+  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
