@@ -1,5 +1,7 @@
 ## 🗒 GoLang To-Do List Sample App w/ Redis
 
+[![Build Status](https://app.travis-ci.com/bvisonl/godo-list.svg?branch=master)](https://app.travis-ci.com/bvisonl/godo-list)
+
 ### 📝 Description
 
 A simple to-do list app written in GoLang with Redis as a backend showing a few GoLang features.
